@@ -9,11 +9,16 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { createGlobalStyle, styled } from "styled-components";
 import { useEffect, useState } from "react";
 import { auth } from "./firebase";
+import ProtectedRoute from "./components/protected-route";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Layout />,
+        element: (
+            <ProtectedRoute>
+                <Layout />
+            </ProtectedRoute>
+        ),
         children: [
             {
                 path: "",
@@ -44,28 +49,28 @@ const GlobalStyle = createGlobalStyle`
         color:#fff;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
-`
+`;
 
 const Wrapper = styled.div`
-    height:100vh;
+    height: 100vh;
     display: flex;
     justify-content: center;
-`
+`;
 
 function App() {
     const [isLoading, setIsLoading] = useState(true);
-    const init = async() =>{
+    const init = async () => {
         //wait for firebase
         await auth.authStateReady();
         setIsLoading(false);
-    }
-    useEffect(()=>{
+    };
+    useEffect(() => {
         init();
-    },[]);
+    }, []);
     return (
         <Wrapper>
             <GlobalStyle />
-            {isLoading ? <LoadingScreen/> : <RouterProvider router={router} />}
+            {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
         </Wrapper>
     );
 }
