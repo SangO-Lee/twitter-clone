@@ -1,18 +1,58 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { auth } from "../firebase";
 
-const Wrapper = styled.div``;
-const Menu = styled.div``;
-const MenuItem = styled.div``;
+const Wrapper = styled.div`
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr 4fr;
+    height: 100%;
+    padding: 50px 0px;
+    width: 100%;
+    max-width: 860px;
+`;
+const Menu = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+`;
+const MenuItem = styled.div`
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    svg {
+        width: 30px;
+        fill: white;
+    }
+    &.log-out {
+        border-color: tomato;
+        svg {
+            fill: tomato;
+        }
+    }
+`;
 
 export default function Layout() {
+    const navigate = useNavigate();
+    const onLogOut = async () => {
+        const ok = confirm("Are you sure you want to logout?");
+        if (ok) {
+            auth.signOut();
+            navigate("/login");
+        }
+    };
     return (
         <Wrapper>
             <Menu>
                 <Link to="/login">
                     <MenuItem>
                         <svg
-                            dataSlot="icon"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg"
@@ -29,7 +69,6 @@ export default function Layout() {
                 <Link to="/">
                     <MenuItem>
                         <svg
-                            dataSlot="icon"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg"
@@ -43,10 +82,8 @@ export default function Layout() {
                         </svg>
                     </MenuItem>
                 </Link>
-                {/* <Link to=""></Link> */}
-                <MenuItem>
+                <MenuItem className="log-out" onClick={onLogOut}>
                     <svg
-                        dataSlot="icon"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg"

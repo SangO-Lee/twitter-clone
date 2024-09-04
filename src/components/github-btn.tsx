@@ -1,4 +1,5 @@
 import {
+    AuthProvider,
     GithubAuthProvider,
     GoogleAuthProvider,
     signInWithPopup,
@@ -37,7 +38,7 @@ const Logo = styled.img`
 
 export default function GithubBtn() {
     const navigate = useNavigate();
-    const onClick = async (provider) => {
+    const onClick = async (provider: AuthProvider) => {
         try {
             await signInWithPopup(auth, provider);
             navigate("/");
